@@ -23,7 +23,7 @@ async function run(){
         app.get('/products', async(req, res)=>{
             const cursor = productsCollection.find({});
             const products = await cursor.toArray();
-            res.json(products);
+            return res.json(products);
 
         });
     }
