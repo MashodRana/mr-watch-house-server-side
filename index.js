@@ -32,6 +32,7 @@ async function run() {
     const ordersCollection = database.collection("orders");
     app.post("/order", async (req, res) => {
       const order = req.body;
+      // console.log(order);
       order.status = "pending";
       const cursor = await ordersCollection.insertOne(order);
       res.json({
