@@ -21,6 +21,48 @@ async function run() {
     await client.connect();
     console.log("Database connection successful.");
     const database = client.db("mr-watch-house");
+
+    const userCollection = database.collection('users');
+
+    // Check user is admin
+    app.get('/users/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      let isAdmin = false;
+      if (user?.role === 'admin') {
+        isAdmin = true;
+      }
+      res.json({ admin: isAdmin });
+    })
+
+    //  // Add user as admin
+    //  app.put('/users/admin', async (req, res) => {
+    //   const email = req.body?.email;
+    //   const filter = { email: email };
+    //   const options = { upsert: true };
+    //   const updateDoc = { $set: { role: 'admin' } };
+    //   const result = await userCollection.updateOne(filter, updateDoc);
+    // })
+
+    // Add user as admin
+    app.put('/users/admin', async (req, res) => {
+      const email = req.body?.email;
+      const filter = { email: email };
+      const updateDoc = { $set: { role: 'admin' } };
+      const result = await userCollection.updateOne(filter, updateDoc);
+      res.json(result);
+    })
+
+    // Save user to the database
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      console.log(result);
+      res.json(result);
+    });
+
+
     const productsCollection = database.collection("products");
 
     // Get all products
@@ -118,16 +160,16 @@ async function run() {
     const reviewCollections = database.collection('reviews');
 
     // Get all reviews
-    app.get('/reviews', async(req, res)=>{
+    app.get('/reviews', async (req, res) => {
       const reviews = await reviewCollections.find({}).toArray();
       res.json(reviews);
     })
 
     // add a review
-    app.post('/review', async(req, res)=>{
+    app.post('/review', async (req, res) => {
       const review = req.body;
       const reviews = await reviewCollections.insertOne(review);
-      res.json({message: 'Your review successfully posted.'});
+      res.json({ message: 'Your review successfully posted.' });
     })
   } finally {
     // await client.close();
