@@ -2,8 +2,17 @@
 
 Welcome to the Mashod Rana's Watch House server side.
 
-### Demo Resources
+This repo contain server side code and provide api for frontend developer.
 
-I am adding text for testing purpose.
-https://www.watchshop.com/watches/boss/mens.plp
-https://www.chrono24.com/patekphilippe/patek-philippe-perpetual-calendar-chronograph--id21447157.htm
+you can do
+- fecth data
+- crate data
+- dlete data
+- update data
+
+## Technology
+
+- Node.js
+- Express
+- MongoDB (database)
+- Heroku (deployment)
